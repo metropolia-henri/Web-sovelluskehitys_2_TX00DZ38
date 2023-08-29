@@ -1,5 +1,11 @@
 import {Request, Response, NextFunction} from 'express';
-import {getAllCategories, getCategoryById} from '../models/categoryModel';
+import {
+  addCategory,
+  getAllCategories,
+  getCategoryById,
+} from '../models/categoryModel';
+import {PostCategory} from '../../interfaces/Category';
+import MessageResponse from '../../interfaces/MessageResponse';
 
 const categoryListGet = async (
   req: Request,
@@ -27,4 +33,21 @@ const categoryGet = async (
   }
 };
 
-export {categoryListGet, categoryGet};
+const categoryPost = async (
+  req: Request<{}, {}, PostCategory>,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const id = await addCategory(req.body);
+    const message: MessageResponse = {
+      message: 'Category added',
+      id: id,
+    };
+    res.json(message);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export {categoryListGet, categoryGet, categoryPost};

@@ -1,6 +1,6 @@
 /* eslint-disable node/no-unpublished-import */
 import request from 'supertest';
-import Category from '../src/interfaces/Category';
+import {Category} from '../src/interfaces/Category';
 import MessageResponse from '../src/interfaces/MessageResponse';
 
 // functios to test succesful cateory routes
@@ -21,15 +21,15 @@ const getApiRoot = (url: string | Function): Promise<MessageResponse> => {
 const getCategories = (url: string | Function): Promise<Category[]> => {
   return new Promise((resolve, reject) => {
     request(url)
-      .get('/api/v1/category')
+      .get('/api/v1/categories')
       .expect(200, (err, response) => {
         if (err) {
           reject(err);
         } else {
           const categories: Category[] = response.body;
           categories.forEach((category) => {
-            expect(category.category_id).toBeGreaterThan(0);
-            expect(category.category_name).not.toBe('');
+            expect(category.id).toBeGreaterThan(0);
+            expect(category.name).not.toBe('');
           });
           resolve(categories);
         }
@@ -46,8 +46,8 @@ const getCategory = (url: string | Function, id: number): Promise<Category> => {
           reject(err);
         } else {
           const category: Category = response.body;
-          expect(category.category_id).toBeGreaterThan(0);
-          expect(category.category_name).not.toBe('');
+          expect(category.id).toBeGreaterThan(0);
+          expect(category.name).not.toBe('');
           resolve(category);
         }
       });

@@ -1,8 +1,8 @@
-import express, {Request, Response} from 'express';
+import express, {Request, Response, Router} from 'express';
 
 import categoryRoute from './routes/categoryRoute';
 
-const router = express.Router();
+const router: Router = express.Router();
 
 router.get('/', (req: Request, res: Response) => {
   res.json({
@@ -11,5 +11,7 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.use('/categories', categoryRoute);
+router.use('/species', categoryRoute);
+router.use('/animals', categoryRoute);
 
 export default router;

@@ -1,10 +1,12 @@
 import {RowDataPacket} from 'mysql2';
 
 interface Category {
-  category_id: number;
-  category_name: string;
+  id: number;
+  name: string;
 }
 
 interface GetCategory extends RowDataPacket, Category {}
 
-export {Category, GetCategory};
+type PostCategory = Omit<Category, 'id'>;
+
+export {Category, GetCategory, PostCategory};
