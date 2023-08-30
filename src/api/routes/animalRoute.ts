@@ -1,11 +1,13 @@
 import express from 'express';
-import {animalGet, animalListGet} from '../controllers/animalController';
+import {
+  animalGet,
+  animalListGet,
+  animalPost,
+} from '../controllers/animalController';
 
 const router = express.Router();
 
-router.route('/').get(animalListGet);
-
-//router.route('/').post(animalPost)
+router.route('/').get(animalListGet).post(animalPost);
 
 router.route('/:id').get(animalGet);
 

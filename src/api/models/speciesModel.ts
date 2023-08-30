@@ -16,7 +16,7 @@ const getAllSpecies = async (): Promise<Species[]> => {
 
 const getSpeciesById = async (id: number): Promise<Species> => {
   const [rows] = await promisePool.execute<GetSpecies[]>(
-    'SELECT * FROM species WHERE id = ?',
+    'SELECT * FROM species WHERE species_id = ?',
     [id]
   );
   if (rows.length === 0) {
@@ -27,8 +27,8 @@ const getSpeciesById = async (id: number): Promise<Species> => {
 
 const addSpecies = async (species: PostSpecies) => {
   const [headers] = await promisePool.execute<ResultSetHeader>(
-    'INSERT INTO species (name) VALUES (?)',
-    [species.name]
+    'INSERT INTO species (species_name) VALUES (?)',
+    [species.name, species.category]
   );
   if (headers.affectedRows === 0) {
     throw new CustomError('Species not added', 304);
@@ -36,4 +36,30 @@ const addSpecies = async (species: PostSpecies) => {
   return headers.insertId;
 };
 
-export {getAllSpecies, getSpeciesById, addSpecies};
+const updateSpecies = async (id: number, species: PostSpecies) => {
+  const [headers] = await promisePool.execute<ResultSetHeader>(
+    'UPDATE species SET species_name = ?, category = ? WHERE species_id = ?',
+    [species.name, species.category, id]
+  );
+  if (headers.affectedRows === 0) {
+    throw new CustomError('Species not fount', 404);
+  }
+};
+
+const deleteSpecies = async (id: number) => {
+  const [headers] = await promisePool.execute<ResultSetHeader>(
+    'DELETE FROM species WHERE species_id = ?',
+    [id]
+  );
+  if (headers.affectedRows === 0) {
+    throw new CustomError('Species not fount', 404);
+  }
+};
+
+export {
+  getAllSpecies,
+  getSpeciesById,
+  addSpecies,
+  updateSpecies,
+  deleteSpecies,
+};
