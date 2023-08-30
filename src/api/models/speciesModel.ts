@@ -2,7 +2,12 @@
 import {ResultSetHeader} from 'mysql2';
 import CustomError from '../../classes/CustomError';
 import promisePool from '../../database/db';
-import {Species, GetSpecies, PostSpecies} from '../../interfaces/Species';
+import {
+  Species,
+  GetSpecies,
+  PostSpecies,
+  ImageSpecies,
+} from '../../interfaces/Species';
 
 const getAllSpecies = async (): Promise<Species[]> => {
   const [rows] = await promisePool.execute<GetSpecies[]>(
@@ -25,10 +30,10 @@ const getSpeciesById = async (id: number): Promise<Species> => {
   return rows[0] as Species;
 };
 
-const addSpecies = async (species: PostSpecies) => {
+const addSpecies = async (species: ImageSpecies) => {
   const [headers] = await promisePool.execute<ResultSetHeader>(
-    'INSERT INTO species (species_name) VALUES (?)',
-    [species.name, species.category]
+    'INSERT INTO species (species_name, category, image) VALUES (?)',
+    [species.name, species.category, species.image]
   );
   if (headers.affectedRows === 0) {
     throw new CustomError('Species not added', 304);

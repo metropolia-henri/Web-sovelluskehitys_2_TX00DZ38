@@ -13,12 +13,12 @@ const router = express.Router();
 router
   .route('/')
   .get(categoryListGet)
-  .post(body('category_name').notEmpty().isString().escape(), categoryPost);
+  .post(body('name').notEmpty().isString().escape(), categoryPost);
 
 router
   .route('/:id')
   .get(param('id').isInt(), categoryGet)
-  .put(body('category_name').notEmpty().isString().escape(), categoryPut)
+  .put(body('name').notEmpty().isString().escape(), categoryPut)
   .delete(categoryDelete);
 
 export default router;

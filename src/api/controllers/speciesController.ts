@@ -8,7 +8,8 @@ import {
   deleteSpecies,
 } from '../models/speciesModel';
 import MessageResponse from '../../interfaces/MessageResponse';
-import {PostSpecies} from '../../interfaces/Species';
+import {ImageSpecies, PostSpecies} from '../../interfaces/Species';
+import imageFromWikipedia from '../../functions/imageFromWikipedia';
 
 const speciesListGet = async (
   req: Request,
@@ -36,12 +37,18 @@ const speciesGet = async (
   }
 };
 const speciesPost = async (
-  req: Request<{}, {}, PostSpecies>,
+  req: Request<{}, {}, ImageSpecies>,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const id = await addSpecies(req.body);
+    const image = await imageFromWikipedia(req.body.name);
+
+    const speciesWithImage: ImageSpecies = {
+      ...req.body,
+      image,
+    };
+    const id = await addSpecies(speciesWithImage);
     const message: MessageResponse = {
       message: 'Species added',
       id: id,

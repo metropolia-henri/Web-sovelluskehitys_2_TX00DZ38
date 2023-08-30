@@ -36,6 +36,7 @@ const addCategory = async (category: PostCategory) => {
 };
 
 const updateCategory = async (id: number, category: PostCategory) => {
+  console.log(id, category.name);
   const [headers] = await promisePool.execute<ResultSetHeader>(
     'UPDATE categories SET categories_name = ? WHERE categories_id = ?',
     [category.name, id]

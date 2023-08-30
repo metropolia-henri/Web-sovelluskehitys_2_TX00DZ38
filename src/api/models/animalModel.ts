@@ -25,10 +25,10 @@ const getAnimalById = async (id: number) => {
   return rows[0] as Animal;
 };
 
-const addAnimal = async (category: PostAnimal) => {
+const addAnimal = async (animal: PostAnimal) => {
   const [headers] = await promisePool.execute<ResultSetHeader>(
     'INSERT INTO animals (animals_name) VALUES (?)',
-    [category.name]
+    [animal.name]
   );
   if (headers.affectedRows === 0) {
     throw new CustomError('Animal not added', 304);
@@ -36,10 +36,10 @@ const addAnimal = async (category: PostAnimal) => {
   return headers.insertId;
 };
 
-const updateAnimal = async (id: number, category: PostAnimal) => {
+const updateAnimal = async (id: number, animal: PostAnimal) => {
   const [headers] = await promisePool.execute<ResultSetHeader>(
     'UPDATE animals SET animals_name = ? WHERE animals_id = ?',
-    [category.name, id]
+    [animal.name, id]
   );
   if (headers.affectedRows === 0) {
     throw new CustomError('Animal not fount', 404);
