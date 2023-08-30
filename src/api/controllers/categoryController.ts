@@ -30,6 +30,18 @@ const categoryGet = async (
   next: NextFunction
 ) => {
   try {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      errors
+        .array()
+        .map((error) => {
+          return `${error.msg}: ${error.param}`;
+        })
+        .join(',');
+      throw new CustomError('invalid', 400);
+    }
+
     const category = await getCategoryById(req.params.id);
     res.json(category);
   } catch (error) {

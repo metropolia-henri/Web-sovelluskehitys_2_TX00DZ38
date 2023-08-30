@@ -9,6 +9,6 @@ const router = express.Router();
 
 router.route('/').get(speciesListGet).post(speciesPost);
 
-router.route('/:id').get(speciesGet);
+router.route('/:id').get(speciesGet).put().delete();
 
 export default router;
